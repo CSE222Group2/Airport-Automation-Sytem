@@ -73,5 +73,14 @@ public class Sector {
 	public boolean updateSecurityState(SecurityStates SS){
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "Sector{" +
+				"ID=" + sectorID +
+				", Cleaning State='" + cleanningState + '\'' +
+				", Security State='" + securityState + '\'' +
+				'}';
+	}
 
 }
