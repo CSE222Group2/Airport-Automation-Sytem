@@ -52,6 +52,7 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addPilot(Pilot newPilot){
+        	if (newPilot.equals(null)) throw new NullPointerException("Pilot cannot be null!");
             return pilots.add(newPilot);
         }
 
@@ -62,6 +63,7 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addPlane(Plane newPlane){
+        	if (newPlane.equals(null)) throw new NullPointerException("Plane cannot be null!");
             return planes.add(newPlane);
         }
 
@@ -72,13 +74,8 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addFlight(Flight newFlight){
-        	int index = hostesses.indexOf(newFlight.hostess);
-        	hostesses.get(index).addFlight(newFlight);
-        	
-        	index = pilots.indexOf(newFlight.pilot);
-        	pilots.get(index).addFlight(newFlight);
-        	
-            return flights.add(newFlight);
+        	if (newFlight.equals(null)) throw new NullPointerException("Flight cannot be null!");
+        	return flights.add(newFlight);
         }
 
         /**
@@ -88,6 +85,7 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addHostess(Hostess newHostess){
+        	if (newHostess.equals(null)) throw new NullPointerException("Hostess cannot be null!");
             return hostesses.add(newHostess);
         }
 
@@ -98,22 +96,23 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean removePilot(Pilot removePilot){
+        	if (removePilot.equals(null)) throw new NullPointerException("Pilot cannot be null!");
+        	
         	int index = pilots.indexOf(removePilot);
         	
         	if(index >= 0 && pilots.get(index).flights.size() > 0) {
-        		Scanner sc = new Scanner(System.in);
+        		Scanner scInt = new Scanner(System.in);
+        		Scanner scStr = new Scanner(System.in);
         		System.out.printf("\n Please give an ID to change the pilot: ");
-				int tempID = sc.nextInt();
+				int tempID = scInt.nextInt();
 				System.out.printf("\n Please give a password to change the pilot: ");
-				String tempPassword = sc.next();
-				sc.close();
+				String tempPassword = scStr.nextLine();
 				
         		Pilot newPilot = findPilot(tempID, tempPassword);
-        		int newIndex = pilots.indexOf(newPilot);
         		
-        		for(Flight it : pilots.get(index).flights) {
+        		for(Flight it : removePilot.flights) {
         			it.setPilot(newPilot);
-        			pilots.get(newIndex).addFlight(it);
+        			newPilot.addFlight(it);
         		}
         	}
             return pilots.remove(removePilot);
@@ -126,6 +125,19 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean removePlane(Plane removePlane){
+        	if (removePlane.equals(null)) throw new NullPointerException("Plane cannot be null!");
+        	
+        	for(Flight it : flights) {
+        		if(it.plane.equals(removePlane)) {
+        			Scanner sc = new Scanner(System.in);
+        			System.out.printf("\n Given plane has a flight: " + it.flightID);
+            		System.out.printf("\n Please give an ID to change the plane: ");
+    				int tempID = sc.nextInt();
+    				Plane newPlane = findPlane(tempID);
+    				it.setPlane(newPlane); 				
+        		}
+        	}
+        	
             return planes.remove(removePlane);
         }
 
@@ -137,13 +149,13 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean removeFlight(Flight removeFlight){
-        	int index = hostesses.indexOf(removeFlight.hostess);
-        	hostesses.get(index).removeFlight(removeFlight);
+        	if (removeFlight.equals(null)) throw new NullPointerException("Flight cannot be null!");
         	
-        	index = pilots.indexOf(removeFlight.pilot);
-        	pilots.get(index).removeFlight(removeFlight);
-        	
-        	return flights.remove(removeFlight);
+        	int index = flights.indexOf(removeFlight);
+        	Flight tmp = flights.remove(index);
+        	tmp.getHostess().removeFlight(removeFlight);
+        	tmp.getPilot().removeFlight(removeFlight);
+        	return true;
         }
 
         /**
@@ -153,22 +165,23 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean removeHostess(Hostess removeHostess){
+        	if (removeHostess.equals(null)) throw new NullPointerException("Hostess cannot be null!");
+        	
         	int index = hostesses.indexOf(removeHostess);
         	
         	if(index >= 0 && hostesses.get(index).flights.size() > 0) {
-        		Scanner sc = new Scanner(System.in);
+        		Scanner scInt = new Scanner(System.in);
+        		Scanner scStr = new Scanner(System.in);
         		System.out.printf("\n Please give an ID to change the hostess: ");
-				int tempID = sc.nextInt();
+				int tempID = scInt.nextInt();
 				System.out.printf("\n Please give a password to change the hostess: ");
-				String tempPassword = sc.next();
-				sc.close();
+				String tempPassword = scStr.next();
 				
         		Hostess newHostess = findHostess(tempID, tempPassword);
-        		int newIndex = hostesses.indexOf(newHostess);
         		
-        		for(Flight it : hostesses.get(index).flights) {
+        		for(Flight it : removeHostess.flights) {
         			it.setHostess(newHostess);
-        			hostesses.get(newIndex).addFlight(it);
+        			newHostess.addFlight(it);
         		}
         	}
             return hostesses.remove(removeHostess);
@@ -241,6 +254,10 @@ public class Firm {
     
     public String getFirmName() {
 		return firmName;
+	}
+    
+    public void setFirmName(String firmName) {
+		this.firmName = firmName;
 	}
     
      /**
