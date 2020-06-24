@@ -1,43 +1,38 @@
 package cse222.proje;
-import com.sun.source.tree.BinaryTree;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public class Firm {
     /**
      * Holds Firm's administrators
      */
-    private ArrayList<Administrator> administrators;
+    Administrator administrator;
     /**
      * Holds Firm's flights
      */
-    private ArrayList<Flight> flights;
+    ArrayList<Flight> flights; // avl tree
     /**
-     * Holds Firm's planes
+     * Holds Firm's planes 
      */
-    private ArrayList<Plane> planes;
+    ArrayList<Plane> planes; // set
     /**
      * Holds Firm's hostesses
      */
-    private ArrayList<Hostess> hostesses;
+    ArrayList<Hostess> hostesses; // skip list
     /**
      * Holds Firm's Pilots
      */
-    private ArrayList<Pilot> Pilots;
+    ArrayList<Pilot> pilots; // avl tree
     /**
      * Holds Firm's name
      */
-    private String firmName;
+    String firmName;
     /**
      * Save old flight in a stack
      */
-    private Stack<Flight> oldFlights; // priority queue
-
-    public Firm() {
-
-    }
+    MinHeap<Flight> oldFlights;
 
     public class Administrator extends Employee{
         /**
@@ -51,20 +46,6 @@ public class Firm {
             super(name, surname, ID, password);
         }
 
-        public Administrator() {
-            super();
-        }
-
-        /**
-         * Returns true if successfully add new Administrator, otherwise false
-         * @param admin will be added
-         * @return true if successfully add new Administrator, otherwise false
-         * @throws NullPointerException if given parameter is null
-         */
-        public boolean addAdministrator(Administrator admin){
-            return true;
-        }
-
         /**
          * Returns true if successfully add new pilot, otherwise false
          * @param newPilot will be added
@@ -72,7 +53,8 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addPilot(Pilot newPilot){
-            return Pilots.add(newPilot);
+        	if (newPilot.equals(null)) throw new NullPointerException("Pilot cannot be null!");
+            return pilots.add(newPilot);
         }
 
         /**
@@ -82,6 +64,7 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addPlane(Plane newPlane){
+        	if (newPlane.equals(null)) throw new NullPointerException("Plane cannot be null!");
             return planes.add(newPlane);
         }
 
@@ -92,7 +75,8 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addFlight(Flight newFlight){
-            return flights.add(newFlight);
+        	if (newFlight.equals(null)) throw new NullPointerException("Flight cannot be null!");
+        	return flights.add(newFlight);
         }
 
         /**
@@ -102,17 +86,8 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addHostess(Hostess newHostess){
+        	if (newHostess.equals(null)) throw new NullPointerException("Hostess cannot be null!");
             return hostesses.add(newHostess);
-        }
-
-        /**
-         *  Returns true if successfully remove given Administrator, otherwise false, can remove until 1 Administrator last
-         * @param removeAdministrator will be removed
-         * @return true if successfully remove given Administrator, otherwise false
-         * @throws NullPointerException if given parameter is null
-         */
-        public Administrator removeAdministrator(Administrator removeAdministrator){
-            return new Administrator();
         }
 
         /**
@@ -121,8 +96,27 @@ public class Firm {
          * @return true if successfully remove given pilot, otherwise false
          * @throws NullPointerException if given parameter is null
          */
-        public Pilot removePilot(Pilot removePilot){
-            return Pilots.remove(0);
+        public boolean removePilot(Pilot removePilot){
+        	if (removePilot.equals(null)) throw new NullPointerException("Pilot cannot be null!");
+        	
+        	int index = pilots.indexOf(removePilot);
+        	
+        	if(index >= 0 && pilots.get(index).flights.size() > 0) {
+        		Scanner scInt = new Scanner(System.in);
+        		Scanner scStr = new Scanner(System.in);
+        		System.out.printf("\n Please give an ID to change the pilot: ");
+				int tempID = scInt.nextInt();
+				System.out.printf("\n Please give a password to change the pilot: ");
+				String tempPassword = scStr.nextLine();
+				
+        		Pilot newPilot = findPilot(tempID, tempPassword);
+        		
+        		for(Flight it : removePilot.flights) {
+        			it.setPilot(newPilot);
+        			newPilot.addFlight(it);
+        		}
+        	}
+            return pilots.remove(removePilot);
         }
 
         /**
@@ -131,8 +125,21 @@ public class Firm {
          * @return true if successfully remove given plane, otherwise false
          * @throws NullPointerException if given parameter is null
          */
-        public Plane removePlane(Plane removePlane){
-            return planes.remove(0);
+        public boolean removePlane(Plane removePlane){
+        	if (removePlane.equals(null)) throw new NullPointerException("Plane cannot be null!");
+        	
+        	for(Flight it : flights) {
+        		if(it.plane.equals(removePlane)) {
+        			Scanner sc = new Scanner(System.in);
+        			System.out.printf("\n Given plane has a flight: " + it.flightID);
+            		System.out.printf("\n Please give an ID to change the plane: ");
+    				int tempID = sc.nextInt();
+    				Plane newPlane = findPlane(tempID);
+    				it.setPlane(newPlane); 				
+        		}
+        	}
+        	
+            return planes.remove(removePlane);
         }
 
         /**
@@ -142,10 +149,14 @@ public class Firm {
          * @return true if successfully remove given flight, otherwise false
          * @throws NullPointerException if given parameter is null
          */
-        public Flight removeFlight(Flight removeFlight){
-            Flight temp = flights.remove(0);
-            temp.getPilot().removeFlight(temp);
-            return temp;
+        public boolean removeFlight(Flight removeFlight){
+        	if (removeFlight.equals(null)) throw new NullPointerException("Flight cannot be null!");
+        	
+        	int index = flights.indexOf(removeFlight);
+        	Flight tmp = flights.remove(index);
+        	tmp.getHostess().removeFlight(removeFlight);
+        	tmp.getPilot().removeFlight(removeFlight);
+        	return true;
         }
 
         /**
@@ -154,8 +165,27 @@ public class Firm {
          * @return true if successfully remove given hostess, otherwise false
          * @throws NullPointerException if given parameter is null
          */
-        public Hostess removeHostess(Hostess removeHostess){
-            return hostesses.remove(0);
+        public boolean removeHostess(Hostess removeHostess){
+        	if (removeHostess.equals(null)) throw new NullPointerException("Hostess cannot be null!");
+        	
+        	int index = hostesses.indexOf(removeHostess);
+        	
+        	if(index >= 0 && hostesses.get(index).flights.size() > 0) {
+        		Scanner scInt = new Scanner(System.in);
+        		Scanner scStr = new Scanner(System.in);
+        		System.out.printf("\n Please give an ID to change the hostess: ");
+				int tempID = scInt.nextInt();
+				System.out.printf("\n Please give a password to change the hostess: ");
+				String tempPassword = scStr.next();
+				
+        		Hostess newHostess = findHostess(tempID, tempPassword);
+        		
+        		for(Flight it : removeHostess.flights) {
+        			it.setHostess(newHostess);
+        			newHostess.addFlight(it);
+        		}
+        	}
+            return hostesses.remove(removeHostess);
         }
 
         /**
@@ -163,7 +193,9 @@ public class Firm {
          * @return all pilots that firm has as StringBuilder
          */
         public StringBuilder displayPilots(){
-            return new StringBuilder();
+        	StringBuilder str = new StringBuilder();
+        	for(Pilot it : pilots) str.append(it.toString());        	
+            return str;
         }
 
         /**
@@ -171,7 +203,9 @@ public class Firm {
          * @return all planes that firm has as StringBuilder
          */
         public StringBuilder displayPlanes(){
-            return new StringBuilder();
+        	StringBuilder str = new StringBuilder();
+        	for(Plane it : planes) str.append(it.toString());        	
+            return str;
         }
 
         /**
@@ -179,7 +213,9 @@ public class Firm {
          * @return all flights that firm has as StringBuilder
          */
         public StringBuilder displayFlights(){
-            return new StringBuilder();
+        	StringBuilder str = new StringBuilder();
+        	for(Flight it : flights) str.append(it.toString());        	
+            return str;
         }
 
         /**
@@ -187,7 +223,9 @@ public class Firm {
          * @return all hostesses that firm has as StringBuilder
          */
         public StringBuilder displayHostesses(){
-            return new StringBuilder();
+        	StringBuilder str = new StringBuilder();
+        	for(Hostess it : hostesses) str.append(it.toString());        	
+            return str;
         }
 
         /**
@@ -197,11 +235,12 @@ public class Firm {
          * @throws NullPointerException if given parameter is null
          */
         public boolean addOldFlight(Flight oldFlight){
+        	oldFlights.insert(oldFlight);
             return true;
-        }
+        }    
         
         public boolean removeOldFlights(Date date){
-
+        	/////////////
             return true;
         }
         
@@ -211,11 +250,12 @@ public class Firm {
          */
         public StringBuilder displayOldFlights(){
             StringBuilder str = new StringBuilder();
-            for(Flight it : oldFlights) str.append(it.toString());
+            Iterator<Flight> it = oldFlights.iterator();
+            while(it.hasNext()) {
+            	str.append(it.next().toString());
+            }
             return str;
         }
-
-
     }
 
     /**
@@ -224,27 +264,34 @@ public class Firm {
      */
     public Firm(String firmName){
         this.firmName = firmName;
-
+        this.administrator = new Administrator("", "", 0, "");
+        this.flights = new ArrayList<Flight>();
+        this.hostesses = new ArrayList<Hostess>();
+        this.pilots = new ArrayList<Pilot>();
+        this.planes = new ArrayList<Plane>();
     }
-
-    /**
-     * Returns Administrator which has given ID and password, if not exist returns null
-     * @param ID will be checked
-     * @param password will be checked
-     * @return Administrator which has given ID and password, if not exist returns null
-     */
-    public Administrator findAdmin(int ID, String password){
-        return new Administrator();
-    }
-
-    /**
+    
+    public String getFirmName() {
+		return firmName;
+	}
+    
+    public void setFirmName(String firmName) {
+		this.firmName = firmName;
+	}
+    
+     /**
      * Returns Pilot which has given ID and password, if not exist returns null
      * @param ID will be checked
      * @param password will be checked
      * @return Pilot which has given ID and password, if not exist returns null
      */
     public Pilot findPilot(int ID, String password){
-        return new Pilot();
+    	for(Pilot it : pilots) {
+        	if (it.getID() == ID && it.getPassword().equals(password)) return it;
+        }
+        
+        System.out.printf("No pilot has found!");
+    	return null;
     }
 
     /**
@@ -254,7 +301,12 @@ public class Firm {
      * @return Hostess which has given ID and password, if not exist returns null
      */
     public Hostess findHostess(int ID, String password){
-        return new Hostess();
+    	for(Hostess it : hostesses) {
+        	if (it.getID() == ID && it.getPassword().equals(password)) return it;
+        }
+        
+        System.out.printf("No hostess has found!");
+    	return null;
     }
 
     /**
@@ -263,7 +315,12 @@ public class Firm {
      * @return Plane which has given ID and password, if not exist returns null
      */
     public Plane findPlane(int planeID){
-        return new Plane();
+    	for(Plane it : planes) {
+        	if (it.getPlaneID() == planeID) return it;
+        }
+    	
+        System.out.printf("No plane has found!");
+    	return null;
     }
 
     /**
@@ -272,7 +329,15 @@ public class Firm {
      * @return Flight which has given ID and password, if not exist returns null
      */
     public Flight findFlight(int flightID){
-        return new Flight();
+    	for(Flight it : flights) {
+        	if (it.getFlightID() == flightID) return it;
+        }
+        
+        System.out.printf("No flight has found!");
+    	return null;
     }
 
+    public String toString() {
+    	return firmName;
+    }
 }
