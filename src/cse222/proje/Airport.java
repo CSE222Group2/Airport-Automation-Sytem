@@ -10,7 +10,7 @@ public class Airport {
 	 LinkedList<Firm> firms;
 	 AVLTree<Employee> cleanningPersonels;
 	 AVLTree<Employee> securityPersonels;
-	 Queue<Sector> sectors;
+	 LinkedList<Sector> sectors;
 	 String airportName;
 
 	public Airport() {
