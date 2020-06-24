@@ -11,19 +11,19 @@ public class Firm {
     /**
      * Holds Firm's flights
      */
-    ArrayList<Flight> flights;
+    ArrayList<Flight> flights; // avl tree
     /**
      * Holds Firm's planes
      */
-    ArrayList<Plane> planes;
+    ArrayList<Plane> planes; // set
     /**
      * Holds Firm's hostesses
      */
-    ArrayList<Hostess> hostesses;
+    ArrayList<Hostess> hostesses; // skip list
     /**
      * Holds Firm's Pilots
      */
-    ArrayList<Pilot> pilots;
+    ArrayList<Pilot> pilots; // avl tree
     /**
      * Holds Firm's name
      */
