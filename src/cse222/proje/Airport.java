@@ -7,9 +7,9 @@ public class Airport {
 	
          Administrator administrator;
 	 LinkedList<Firm> firms;
-	 AVLTree<Employee> cleanningPersonels;
+	 AVLTree<Employee> cleanningPersonels; 
 	 AVLTree<Employee> securityPersonels;
-	 Queue<Sector> sectors;
+	 Queue<Sector> cleansectors;
 	 String airportName;
 
 	public Airport() {
