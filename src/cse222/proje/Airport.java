@@ -31,29 +31,8 @@ public class Airport {
 	
 	public class Administrator extends Employee{
 
-		/**
-		 * Creates an Administrator of Firm object
-		 * @param name will be set
-		 * @param surname will be set
-		 * @param ID will be set
-		 * @param password will be set
-		 */
 		public Administrator(String name, String surname, int ID, String password) {
 			super(name, surname, ID, password);
-		}
-
-		public Administrator() {
-			super();
-		}
-
-		/**
-		 * Returns true if successfully add new Administrator, otherwise false
-		 * @param admin will be added
-		 * @return true if successfully add new Administrator, otherwise false
-		 * @throws NullPointerException if given parameter is null
-		 */
-		public boolean addAdministrator(Administrator admin){
-			return true;
 		}
 
 		/**
@@ -63,7 +42,13 @@ public class Airport {
 		 * @throws NullPointerException if given parameter is null
 		 */
 		public boolean addSecurityPersonel(SecurityPersonel sp){
-			return true;
+			if (sp.equals(null))
+				throw new NullPointerException("Security Personel cannot be null!");
+
+			else {
+				securityPersonels.add(sp);
+				return true;
+			}
 		}
 
 		/**
@@ -73,7 +58,14 @@ public class Airport {
 		 * @throws NullPointerException if given parameter is null
 		 */
 		public boolean addCleanningPersonel(CleanningPersonel cp){
-			return true;
+
+			if (cp.equals(null))
+				throw new NullPointerException("Cleaning Personel cannot be null!");
+
+			else{
+				cleanningPersonels.add(cp);
+				return true;
+			}
 		}
 
 		/**
@@ -83,7 +75,14 @@ public class Airport {
 		 * @throws NullPointerException if given parameter is null
 		 */
 		public boolean addSector(Sector sector){
-			return true;
+
+			if (sector.equals(null))
+				throw new NullPointerException("Sector cannot be null!");
+
+			else{
+				sectors.add(sector);
+				return true;
+			}
 		}
 
 		/**
@@ -93,79 +92,141 @@ public class Airport {
 		 * @throws NullPointerException if given parameter is null
 		 */
 		public boolean addFirm(Firm firm){
-			return true;
+
+			if (firm.equals(null))
+				throw new NullPointerException("Firm cannot be null!");
+
+			else{
+				firms.add(firm);
+				return true;
+			}
 		}
 
-		/**
-		 *  Returns true if successfully remove given Administrator, otherwise false, can remove until 1 Administrator last
-		 * @param removeAdministrator will be removed
-		 * @return true if successfully remove given Administrator, otherwise false
-		 * @throws NullPointerException if given parameter is null
-		 */
-		public Administrator removeSecurityPersonel(Administrator removeAdministrator){
-			return new Administrator();
-		}
 
 		/**
 		 *  Returns true if successfully remove given SecurityPersonel, otherwise false
-		 * @param removeSecurityPersonel will be removed
+		 * @param personel will be removed
 		 * @return true if successfully remove given SecurityPersonel, otherwise false
 		 * @throws NullPointerException if given parameter is null
 		 */
-		public SecurityPersonel removeSecurityPersonel(SecurityPersonel removeSecurityPersonel){
-			return new SecurityPersonel();
+		public SecurityPersonel removeSecurityPersonel(SecurityPersonel personel){
+
+			if (personel.equals(null))
+				throw new NullPointerException("Security Personel can not be null!");
+
+			else{
+
+				if (!securityPersonels.contains(personel))
+					throw new NoSuchElementException("There is no such Personel in the list!");
+
+				else
+					return (SecurityPersonel) securityPersonels.remove(personel);
+
+			}
 		}
 
 		/**
 		 *  Returns true if successfully remove given CleanningPersonel, otherwise false
-		 * @param removeCleanningPersonel will be removed
+		 * @param personel will be removed
 		 * @return true if successfully remove given CleanningPersonel, otherwise false
 		 * @throws NullPointerException if given parameter is null
 		 */
-		public CleanningPersonel removeCleanningPersonel(CleanningPersonel removeCleanningPersonel){
-			return new CleanningPersonel();
+
+			public CleanningPersonel removeCleanningPersonel(CleanningPersonel personel){
+
+			if (personel.equals(null))
+				throw new NullPointerException("Cleaning Personel can not be null!");
+
+			else{
+
+				if (!securityPersonels.contains(personel))
+					throw new NoSuchElementException("There is no such personel in the list!");
+
+				else
+					return (CleanningPersonel) cleanningPersonels.remove(personel);
+
+			}
 		}
 
 		/**
-		 *  Returns true if successfully remove given Sector, otherwise false
-		 * @param removeSector will be removed
-		 * @return true if successfully remove given Sector, otherwise false
-		 * @throws NullPointerException if given parameter is null
+		 * @return remove sector
 		 */
-		public Sector removeSector(Sector removeSector){
-			return new Sector();
+		public Sector removeSector(){
+			return sectors.remove();
 		}
 
 		/**
 		 *  Returns true if successfully remove given Firm, otherwise false
-		 * @param removeFirm will be removed
+		 * @param firm will be removed
 		 * @return true if successfully remove given Firm, otherwise false
 		 * @throws NullPointerException if given parameter is null
 		 */
-		public Firm removeFirm(Firm removeFirm){
-			return new Firm();
+		public Firm removeFirm(Firm firm){
+
+			if (firm.equals(null))
+				throw new NullPointerException("Firm can not be null!");
+
+			else{
+
+				if (!firms.contains(firm))
+					throw new NoSuchElementException("There is no such firm in the list!");
+
+				else
+					return firms.remove(firms.indexOf(firm));
+
+			}
 		}
+
+		/**
+		 * @return String Builder that contains firms
+		 */
 		public StringBuilder displayAllFirms(){
-			return new StringBuilder();
+			return new StringBuilder(firms.toString());
 		}
 
-
+		/**
+		 * @return String Builder that contains dirty sectors
+		 */
 		public StringBuilder displayDirtySectors(){
-			return new StringBuilder();
+
+			StringBuilder sb = new StringBuilder();
+			for (Sector sec: sectors) {
+				if (sec.getCleanningState() == Sector.CleanningStates.DIRTY) {
+					sb.append(sec.toString());
+					sb.append(" ");
+				}
+			}
+			return sb;
 		}
 
+		/**
+		 * @return String Builder that contains clean sectors
+		 */
 		public StringBuilder displayCleanSectors(){
-			return new StringBuilder();
+			StringBuilder sb = new StringBuilder();
+			for (Sector sec: sectors) {
+				if (sec.getCleanningState() == Sector.CleanningStates.CLEAN) {
+					sb.append(sec.toString());
+					sb.append(" ");
+				}
+			}
+			return sb;
 		}
+
+		/**
+		 * @return String Builder that contains security personels
+		 */
 
 		public StringBuilder displaySecurityPersonnel(){
-			return new StringBuilder();
+			return securityPersonels.toStringBuilder();
 		}
 
+		/**
+		 * @return String Builder that contains cleaning personels
+		 */
 		public StringBuilder displayCleaningPersonnel(){
-			return new StringBuilder();
+			return cleanningPersonels.toStringBuilder();
 		}
-
 	}
 
 	/**
