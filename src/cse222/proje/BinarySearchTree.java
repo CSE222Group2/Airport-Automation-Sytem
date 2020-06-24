@@ -54,6 +54,25 @@ public class BinarySearchTree<T extends Comparable<T>> {
             printRec(root.left, space);
         }
     }
+    
+    
+     public StringBuilder toStringBuilder(){
+
+        StringBuilder sb = new StringBuilder();
+        printRec(root,sb);
+        return sb;
+    }
+
+    private void printRec(Node<T>root, StringBuilder sb){
+
+        if (root != null) {
+            printRec(root.left,sb);
+            sb.append("\n");
+            sb.append(root.data);
+            sb.append("\n");
+            printRec(root.right,sb);
+        }
+    }
 
     public void delete(T key)
     {
