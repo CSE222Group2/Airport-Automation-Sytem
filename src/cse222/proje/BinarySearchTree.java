@@ -37,21 +37,16 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     public void print(){
 
-        printRec(root,0);
+        printRec(root);
     }
 
-    private void printRec(Node<T>root, int space){
+    private void printRec(Node<T>root){
 
         if (root != null) {
-            space += 20;
-            printRec(root.right, space);
+            printRec(root.left);
             System.out.print("\n");
-
-            for (int i = 20; i < space; i++)
-                System.out.print(" ");
-
             System.out.print(root.data + "\n");
-            printRec(root.left, space);
+            printRec(root.right);
         }
     }
     
