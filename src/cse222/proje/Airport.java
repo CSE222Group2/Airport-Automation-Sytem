@@ -1,19 +1,24 @@
 package cse222.proje;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 
 public class Airport {
-	
-         Administrator administrator;
+
+	 Administrator administrator;
 	 LinkedList<Firm> firms;
-	 AVLTree<Employee> cleanningPersonels; 
+	 AVLTree<Employee> cleanningPersonels;
 	 AVLTree<Employee> securityPersonels;
-	 Queue<Sector> cleansectors;
+	 Queue<Sector> sectors;
 	 String airportName;
 
 	public Airport() {
-
+		administrator = new Administrator("murat","yildiz",1801042004, "cse222");
+		sectors = new LinkedList<>();
+		cleanningPersonels = new AVLTree<>();
+		securityPersonels = new AVLTree<>();
+		firms = new LinkedList<>();
 	}
 
 	/**
@@ -22,11 +27,14 @@ public class Airport {
 	 */
 	public Airport(String airpotName){
 		this.airportName = airpotName;
-		Administrator firstAdmin = new Administrator("murat","yildiz",1801042004, "cse222");
-		administrators = new LinkedList<Administrator>();
-		administrators.add(firstAdmin);
+		administrator = new Administrator("murat","yildiz",1801042004, "cse222");
+		sectors = new LinkedList<>();
+		cleanningPersonels = new AVLTree<>();
+		securityPersonels = new AVLTree<>();
+		firms = new LinkedList<>();
+
 	}
-	
+
 	public class Administrator extends Employee{
 
 		public Administrator(String name, String surname, int ID, String password) {
@@ -234,7 +242,7 @@ public class Airport {
 	 * @return Administrator which has given ID and password, if not exist returns null
 	 */
 	public Administrator findAdministrator(int ID, String password){
-		return new Administrator();
+		return new Administrator("a","b", 1, "a");
 	}
 
 	/**
@@ -244,7 +252,7 @@ public class Airport {
 	 * @return SecurityPersonel which has given ID and password, if not exist returns null
 	 */
 	public SecurityPersonel findSecurityPersonel(int ID, String password){
-		return new SecurityPersonel();
+		return new SecurityPersonel("a","b", 1, "a");
 	}
 
 	/**
@@ -254,15 +262,16 @@ public class Airport {
 	 * @return CleanningPersonel which has given ID and password, if not exist returns null
 	 */
 	public CleanningPersonel findCleanningPersonel(int ID, String password){
-		return new CleanningPersonel();
+		return new CleanningPersonel("a","b", 1, "a");
 	}
 
 	/**
-	 * Returns Sector which has given ID , if not exist returns null
+	 * Returns Sector which has given ID and password, if not exist returns null
 	 * @param ID will be checked
-	 * @return Sector which has given ID , if not exist returns null
+	 * @param password will be checked
+	 * @return Sector which has given ID and password, if not exist returns null
 	 */
-	public Sector findSector(int ID){
+	public Sector findSector(int ID, String password){
 		return new Sector();
 	}
 
@@ -273,7 +282,7 @@ public class Airport {
 	 * @return Firm which has given ID and password, if not exist returns null
 	 */
 	public Firm findFirm(int ID, String password){
-		return new Firm();
+		return new Firm("a");
 	}
 
 	/**
@@ -285,26 +294,7 @@ public class Airport {
 		return "";
 	}
 
-	public StringBuilder displayAllFirms(){
-		return new StringBuilder();
-	}
-
-
-	public StringBuilder displayDirtySectors(){
-		return new StringBuilder();
-	}
-
-	public StringBuilder displayCleanSectors(){
-		return new StringBuilder();
-	}
-
-	public boolean updateSectorSecurity(Sector update){
-
-		return true;
-	}
-
-	public boolean updateSectorCleaning(Sector update){
-
-		return true;
+	public Administrator getAdministrator() {
+		return administrator;
 	}
 }
