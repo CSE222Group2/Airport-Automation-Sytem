@@ -12,6 +12,7 @@ public class Airport {
 	 AVLTree<Employee> securityPersonels;
 	 LinkedList<Sector> sectors;
 	 String airportName;
+	 Queue<Flight> flightOrder;
 
 	public Airport() {
 		administrator = new Administrator("murat","yildiz",1801042004, "cse222");
