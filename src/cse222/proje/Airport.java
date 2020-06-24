@@ -156,12 +156,13 @@ public class Airport {
 		}
 
 		/**
+		 * @param sec that will be removed.
 		 * @return remove sector
 		 */
-		public Sector removeSector(){
-			return sectors.remove();
+		public Sector removeSector(Sector sec){
+			return sectors.remove(sectors.indexOf(sec));
 		}
-
+		
 		/**
 		 *  Returns true if successfully remove given Firm, otherwise false
 		 * @param firm will be removed
