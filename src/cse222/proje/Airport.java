@@ -5,14 +5,12 @@ import java.util.LinkedList;
 
 public class Airport {
 	
-
-	private LinkedList<Administrator> administrators; // BST
-	private LinkedList<Firm> firms; // BST
-	private LinkedList<CleanningPersonel> cleanningPersonels; // BST
-	private LinkedList<SecurityPersonel> securityPersonels; // BST
-	private LinkedList<Sector> cleanSectors; // Queue
-	private LinkedList<Sector> dirtySectors;// Queue
-	private String airportName;
+         Administrator administrator;
+	 LinkedList<Firm> firms;
+	 AVLTree<Employee> cleanningPersonels;
+	 AVLTree<Employee> securityPersonels;
+	 Queue<Sector> sectors;
+	 String airportName;
 
 	public Airport() {
 
