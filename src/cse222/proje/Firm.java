@@ -1,8 +1,10 @@
 package cse222.proje;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class Firm {
     /**
@@ -12,25 +14,25 @@ public class Firm {
     /**
      * Holds Firm's flights
      */
-    ArrayList<Flight> flights; // avl tree
+    AVLTree<Flight> flights;
     /**
      * Holds Firm's planes 
      */
-    ArrayList<Plane> planes; // set
+    Set<Plane> planes;
     /**
      * Holds Firm's hostesses
      */
-    ArrayList<Hostess> hostesses; // skip list
+    ConcurrentSkipListSet<Hostess> hostesses;
     /**
      * Holds Firm's Pilots
      */
-    ArrayList<Pilot> pilots; // avl tree
+    AVLTree<Employee> pilots;
     /**
      * Holds Firm's name
      */
     String firmName;
     /**
-     * Save old flight in a stack
+     * Save old flight in a heap
      */
     MinHeap<Flight> oldFlights;
 
@@ -54,7 +56,8 @@ public class Firm {
          */
         public boolean addPilot(Pilot newPilot){
         	if (newPilot.equals(null)) throw new NullPointerException("Pilot cannot be null!");
-            return pilots.add(newPilot);
+            pilots.add(newPilot);
+            return true;
         }
 
         /**
@@ -76,7 +79,8 @@ public class Firm {
          */
         public boolean addFlight(Flight newFlight){
         	if (newFlight.equals(null)) throw new NullPointerException("Flight cannot be null!");
-        	return flights.add(newFlight);
+        	flights.add(newFlight);
+        	return true;
         }
 
         /**
@@ -98,10 +102,16 @@ public class Firm {
          */
         public boolean removePilot(Pilot removePilot){
         	if (removePilot.equals(null)) throw new NullPointerException("Pilot cannot be null!");
+        	Pilot temp = null;
         	
-        	int index = pilots.indexOf(removePilot);
+        	for(Employee it : pilots) {
+        		if(it.equals(removePilot)) {
+        			temp = (Pilot) it;
+        			break;
+        		}
+        	}
         	
-        	if(index >= 0 && pilots.get(index).flights.size() > 0) {
+        	if(temp.flights.size() > 0) {
         		Scanner scInt = new Scanner(System.in);
         		Scanner scStr = new Scanner(System.in);
         		System.out.printf("\n Please give an ID to change the pilot: ");
@@ -111,12 +121,12 @@ public class Firm {
 				
         		Pilot newPilot = findPilot(tempID, tempPassword);
         		
-        		for(Flight it : removePilot.flights) {
+        		for(Flight it : temp.flights) {
         			it.setPilot(newPilot);
         			newPilot.addFlight(it);
         		}
         	}
-            return pilots.remove(removePilot);
+            return pilots.remove(removePilot) != null;
         }
 
         /**
@@ -152,8 +162,7 @@ public class Firm {
         public boolean removeFlight(Flight removeFlight){
         	if (removeFlight.equals(null)) throw new NullPointerException("Flight cannot be null!");
         	
-        	int index = flights.indexOf(removeFlight);
-        	Flight tmp = flights.remove(index);
+        	Flight tmp = flights.remove(removeFlight);
         	tmp.getHostess().removeFlight(removeFlight);
         	tmp.getPilot().removeFlight(removeFlight);
         	return true;
@@ -167,10 +176,18 @@ public class Firm {
          */
         public boolean removeHostess(Hostess removeHostess){
         	if (removeHostess.equals(null)) throw new NullPointerException("Hostess cannot be null!");
+        	Hostess temp = null;
         	
-        	int index = hostesses.indexOf(removeHostess);
+        	for(Hostess it : hostesses) {
+        		if(it.equals(removeHostess)) {
+        			temp = it;
+        			break;
+        		}
+        	}
         	
-        	if(index >= 0 && hostesses.get(index).flights.size() > 0) {
+        	if(temp.equals(null)) return false;
+        	
+        	if(temp.flights.size() > 0) {
         		Scanner scInt = new Scanner(System.in);
         		Scanner scStr = new Scanner(System.in);
         		System.out.printf("\n Please give an ID to change the hostess: ");
@@ -180,9 +197,9 @@ public class Firm {
 				
         		Hostess newHostess = findHostess(tempID, tempPassword);
         		
-        		for(Flight it : removeHostess.flights) {
-        			it.setHostess(newHostess);
-        			newHostess.addFlight(it);
+        		for(Flight iter : temp.flights) {
+        			iter.setHostess(newHostess);
+        			newHostess.addFlight(iter);
         		}
         	}
             return hostesses.remove(removeHostess);
@@ -194,7 +211,7 @@ public class Firm {
          */
         public StringBuilder displayPilots(){
         	StringBuilder str = new StringBuilder();
-        	for(Pilot it : pilots) str.append(it.toString());        	
+        	for(Employee it : pilots) str.append(it.toString());        	
             return str;
         }
 
@@ -240,7 +257,7 @@ public class Firm {
         }    
         
         public boolean removeOldFlights(Date date){
-        	/////////////
+        	while(date.compareTo(oldFlights.heap.get(0).flightDate) < 0) oldFlights.remove();
             return true;
         }
         
@@ -265,10 +282,10 @@ public class Firm {
     public Firm(String firmName){
         this.firmName = firmName;
         this.administrator = new Administrator("", "", 0, "");
-        this.flights = new ArrayList<Flight>();
-        this.hostesses = new ArrayList<Hostess>();
-        this.pilots = new ArrayList<Pilot>();
-        this.planes = new ArrayList<Plane>();
+        this.flights = new AVLTree<Flight>();
+        this.hostesses = new ConcurrentSkipListSet<Hostess>();
+        this.pilots = new AVLTree<Employee>();
+        this.planes = new HashSet<Plane>();
     }
     
     public String getFirmName() {
@@ -286,8 +303,8 @@ public class Firm {
      * @return Pilot which has given ID and password, if not exist returns null
      */
     public Pilot findPilot(int ID, String password){
-    	for(Pilot it : pilots) {
-        	if (it.getID() == ID && it.getPassword().equals(password)) return it;
+    	for(Employee it : pilots) {
+        	if (it.getID() == ID && it.getPassword().equals(password)) return (Pilot) it;
         }
         
         System.out.printf("No pilot has found!");
