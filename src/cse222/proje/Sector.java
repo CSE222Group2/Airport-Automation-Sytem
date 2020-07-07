@@ -6,14 +6,14 @@ public class Sector {
 	private CleanningStates cleanningState;
 	private SecurityStates securityState;
 
-    public Sector() {
+	public Sector() {
 
-    }
+	}
 
-    public enum CleanningStates{
+	public enum CleanningStates{
 		DIRTY, CLEAN;
 	}
-	
+
 	public enum SecurityStates{
 		SECURE, INSECURE;
 	}
@@ -72,6 +72,15 @@ public class Sector {
 	 */
 	public boolean updateSecurityState(SecurityStates SS){
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Sector{" +
+				"ID=" + sectorID +
+				", Cleaning State='" + cleanningState + '\'' +
+				", Security State='" + securityState + '\'' +
+				'}';
 	}
 
 }

@@ -17,9 +17,9 @@ public class Date implements Comparable<Date>{
 	 * Holds time
 	 */
 	private double time;
-	
-	
-	
+
+
+
 	public Date(int day, int month, int year, double time) {
 		this.day = day;
 		this.month = month;

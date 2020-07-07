@@ -2,6 +2,10 @@ package cse222.proje;
 
 public class SecurityPersonel extends Employee implements Comparable<Employee>{
 
+    public SecurityPersonel() {
+        super();
+    }
+
     public SecurityPersonel(String name, String surname, int ID, String password) {
         super(name, surname, ID, password);
     }

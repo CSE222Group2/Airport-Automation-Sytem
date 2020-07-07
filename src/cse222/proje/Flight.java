@@ -12,7 +12,7 @@ public class Flight implements Comparable<Flight>{
     /**
      * Holds pilot of the flight
      */
-    Pilot pilot;
+    Pilot pilot ;
     /**
      * Holds hostess of the flight
      */
@@ -36,11 +36,11 @@ public class Flight implements Comparable<Flight>{
         this.pilot = pilot;
         this.hostess = hostess;
         this.flightDate = flightDate;
-        
+
         if(pilot != null)
-        	this.pilot.flights.add(this);
+            this.pilot.flights.add(this);
         if(hostess != null)
-        	this.hostess.flights.add(this);
+            this.hostess.flights.add(this);
     }
 
     public Flight() {
@@ -78,14 +78,14 @@ public class Flight implements Comparable<Flight>{
     public void setHostess(Hostess hostess) {
         this.hostess = hostess;
     }
-    
-    public Date getFlightDate() {
-		return flightDate;
-	}
 
-	public void setFlightDate(Date flightDate) {
-		this.flightDate = flightDate;
-	}
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
+    }
 
     @Override
     public int compareTo(Flight o) {
@@ -110,9 +110,9 @@ public class Flight implements Comparable<Flight>{
      * @return Flight Information like flight ID, flight date, plane, pilot, hostess
      */
     public String toString() {
-    	
-    	return "\n Flight ID: " + flightID + "\n Flight " + flightDate + "\n Plane ID: " + plane.planeID
-    			+ "\n\n " + pilot + "\n\n " + hostess + "\n";
+
+        return "\n Flight ID: " + flightID + "\n Flight " + flightDate + "\n Plane ID: " + plane.planeID
+                + "\n\n " + pilot + "\n\n " + hostess + "\n";
     }
 
 }

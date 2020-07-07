@@ -6,16 +6,33 @@ public class Plane {
 	int planeID;
 	StateOfPlane stateOfPlane;
 
-    public Plane() {
+	int uniqePlaneId;
 
-    }
+	public int getUniqePlaneId() {
+		return uniqePlaneId;
+	}
 
-    public enum StateOfPlane{
+	public void setUniqePlaneId(int iD) {
+		this.uniqePlaneId = iD;
+	}
+
+	public Plane() {
+
+	}
+
+	public enum StateOfPlane{
 		ReadyToFly, Flying, Landed  ;
 	}
-	public Plane(int planeID) {
+	public Plane(int planeID,int uniqePlaneId) {
 		this.planeID = planeID;
+		this.uniqePlaneId = uniqePlaneId;
 	}
+
+	public int getPlaneID() {
+		return planeID;
+	}
+
+	public void setPlaneID(int id) { planeID = id; };
 
 	public void setReadinessOfPlane(StateOfPlane stateOfPlane) {
 		this.stateOfPlane = stateOfPlane;

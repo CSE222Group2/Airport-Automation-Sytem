@@ -1,6 +1,10 @@
 package cse222.proje;
 
-public class CleanningPersonel extends Employee implements Comparable<Employee>{
+public class CleanningPersonel extends Employee implements Comparable<Employee> {
+
+	public CleanningPersonel() {
+		super();
+	}
 
 	public CleanningPersonel(String name, String surname, int ID, String password) {
 		super(name, surname, ID, password);
@@ -20,9 +24,6 @@ public class CleanningPersonel extends Employee implements Comparable<Employee>{
 		else {
 
 			if (sector.getCleanningState() == Sector.CleanningStates.DIRTY)
-				return sector.updateCleanningState(Sector.CleanningStates.CLEANNING);
-
-			else if (sector.getCleanningState() == Sector.CleanningStates.CLEANNING)
 				return sector.updateCleanningState(Sector.CleanningStates.CLEAN);
 
 			else

@@ -20,11 +20,11 @@ public abstract class Person {
 		this.surname = surname;
 	}
 
-    public Person() {
+	public Person() {
 
-    }
+	}
 
-    public String getName() {
+	public String getName() {
 		return name;
 	}
 	public void setName(String name) {

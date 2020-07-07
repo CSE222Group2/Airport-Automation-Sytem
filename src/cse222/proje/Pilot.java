@@ -1,12 +1,23 @@
 package cse222.proje;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Pilot extends Employee{
     /**
      * Holds flights that pilot work on
      */
-    private ArrayList<Flight> flights;
+    ArrayList<Flight> flights;
+
+    int pilotId;
+
+    public int getPilotId() {
+        return pilotId;
+    }
+
+    public void setPilotId(int iD) {
+        this.pilotId = iD;
+    }
 
     /**
      * Create a Pilot object
@@ -17,13 +28,21 @@ public class Pilot extends Employee{
      */
     public Pilot(String name, String surname, int ID, String password) {
         super(name, surname, ID, password);
+        this.pilotId = 0;
         this.flights = new ArrayList<Flight>();
     }
-
     public Pilot() {
         super();
     }
 
+    public void addedFlightsOnWorkPilot(int pilotId){
+        //Flights information is added
+       // int firmNo = DbConnection.SelectFirmIdAccordingToPilotId(pilotId);
+        //flights = DbConnection.SelectFlight(firmNo); //DbConnection.SelectFlightAccordingToFlightId(pilotId);
+        int flightId = DbConnection.SelectFlightIdAccordingToPilotId(pilotId);
+        flights = DbConnection.SelectFlightAccordingToFlightId(flightId);
+
+    }
     public void setFlights(ArrayList<Flight> flights) {
         this.flights = flights;
     }
@@ -41,7 +60,7 @@ public class Pilot extends Employee{
                 Plane.StateOfPlane status = Plane.StateOfPlane.valueOf(scanStatus.next());
                 if(status.equals(Plane.StateOfPlane.ReadyToFly) ||
                         status.equals(Plane.StateOfPlane.Flying) ||
-                            status.equals(Plane.StateOfPlane.Landed))
+                        status.equals(Plane.StateOfPlane.Landed))
                     flights.get(i).getPlane().setReadinessOfPlane(status);
                 else
                     throw new IllegalArgumentException();
@@ -57,7 +76,7 @@ public class Pilot extends Employee{
      * @return true if it is added successfully
      */
     public boolean addFlight(Flight addFlight){
-       return flights.add(addFlight);
+        return flights.add(addFlight);
     }
 
     /**
@@ -69,15 +88,41 @@ public class Pilot extends Employee{
         return flights.remove(removeFlight);
     }
 
-    public ArrayList<Flight> getFlights() {
-        return flights;
+
+    /**
+     * Returns Pilot's flights as String
+     * @return Pilot's flights as String
+     */
+    public String getFlights(){
+        String str = new String();
+        Iterator<Flight> iter = flights.iterator();
+
+        while (iter.hasNext()){
+            Flight temp = iter.next();
+            str += "\n Flight ID: " + temp.flightID + "\n Flight " + temp.flightDate + "\n Plane ID: " + temp.plane.planeID + "\n";
+        }
+        return "\n Pilot Flights \n" + str + "\n";
     }
 
-    public Flight getFlight(int flightId){
-        for(int i = 0; i < flights.size(); ++i){
-            if(flights.get(i).getFlightID() == flightId)
-                return flights.get(i);
+    public String getFlight(int flightId){
+        Iterator<Flight> iter = flights.iterator();
+
+        while(iter.hasNext()){
+            Flight temp = iter.next();
+            if(temp.getFlightID() == flightId){
+                return "\n Flight ID: " + temp.flightID + "\n Flight " + temp.flightDate + "\n Plane ID: " + temp.plane.planeID + "\n";
+            }
         }
         return null;
     }
+
+    /**
+     * Returns Information about Pilot like name, surname, ID
+     * @return Information about Pilot like name, surname, ID
+     */
+    public String toString() {
+
+        return "Pilot ID: " + ID + "\n Pilot name: "+name + "\n Pilot surname: "+surname;
+    }
+
 }

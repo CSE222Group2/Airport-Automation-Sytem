@@ -3,11 +3,24 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 public class Hostess extends Employee{
+    String hostId;
+
+    public String getHostId() {
+        return hostId;
+    }
+
+
+
+    public void setHostId(String ID) {
+        this.hostId = ID;
+    }
     /**
      * Holds flights that hostess work on
      */
     ConcurrentSkipListSet<Flight> flights;
-
+    public Hostess() {
+        super();
+    }
     /**
      * Create a Hostess object
      * @param name will be set
@@ -17,19 +30,42 @@ public class Hostess extends Employee{
      */
     public Hostess(String name, String surname, int ID, String password) {
         super(name, surname, ID, password);
+        this.hostId = "";
         this.flights = new ConcurrentSkipListSet<Flight>();
     }
 
-    public Hostess() {
+    public void addedFlightsOnWorkHostess(String hostId){
+        //Flights information is added
+        // int firmNo = DbConnection.SelectFirmIdAccordingToPilotId(pilotId);
+        //flights = DbConnection.SelectFlight(firmNo); //DbConnection.SelectFlightAccordingToFlightId(pilotId);
+        int flightId = DbConnection.SelectFlightIdAccordingToHostessId(hostId);
+        flights = DbConnection.SelectFlightAccordingToFlightIdForHost(flightId);
 
     }
 
+    /**
+     * Adds given flight to pilot's flights
+     * @param addFlight will be added
+     * @return true if it is added successfully
+     */
+    public boolean addFlight(Flight addFlight){
+        return flights.add(addFlight);
+    }
+
+    /**
+     * Removes given flight to pilot's flights
+     * @param removeFlight will be removed
+     * @return true if it is removed successfully
+     */
+    public boolean removeFlight(Flight removeFlight){
+        return flights.remove(removeFlight);
+    }
     /**
      * Returns Hostess's flights as String
      * @return Hostess's flights as String
      */
     public String getFlights(){
-    	String str = new String();
+        String str = new String();
         Iterator<Flight> iter = flights.iterator();
 
         while (iter.hasNext()){
@@ -44,8 +80,8 @@ public class Hostess extends Employee{
      * @return Information about Hostess like name, surname, ID
      */
     public String toString() {
-    	
-    	return "Hostes ID: " + ID + "\n Hostes name: "+name + "\n Hostes surname: "+surname + "\n";
+
+        return "Hostes ID: " + ID + "\n Hostes name: "+name + "\n Hostes surname: "+surname + "\n";
     }
-    
+
 }
