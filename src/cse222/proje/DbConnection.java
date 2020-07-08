@@ -1433,7 +1433,7 @@ public class DbConnection {
             }
         }
     }
-    public static void UpdatePilotAccordingTıFlightId(int flightId,int pilotId)
+    public static void UpdatePilotAccordingToFlightId(int flightId,int pilotId)
     {
         Connection con = DbConnection.connect();
         PreparedStatement ps = null;
@@ -1458,7 +1458,7 @@ public class DbConnection {
             }
         }
     }
-    public static void UpdateHostAccordingTıFlightId(int flightId,String hostId)
+    public static void UpdateHostAccordingToFlightId(int flightId,String hostId)
     {
         Connection con = DbConnection.connect();
         PreparedStatement ps = null;

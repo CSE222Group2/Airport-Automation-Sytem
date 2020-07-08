@@ -130,7 +130,7 @@ public class Firm {
             for(int i= 0 ; i < DbConnection.SelectFlightIdFromFirmIdForPilot(firmId).size() ;++i )
                  System.out.println(DbConnection.SelectFlightIdFromFirmIdForPilot(firmId).get(i));
             int tempID = scInt.nextInt();
-            DbConnection.UpdatePilotAccordingTıFlightId(firmId,tempID);
+            DbConnection.UpdatePilotAccordingToFlightId(firmId,tempID);
             return true;
         }
 
@@ -196,7 +196,7 @@ public class Firm {
             for(int i= 0 ; i < DbConnection.SelectFlightIdFromFirmIdForHostess(firmId).size() ;++i )
                 System.out.println(DbConnection.SelectFlightIdFromFirmIdForHostess(firmId).get(i));
             String tempID = scanner.next();
-            DbConnection.UpdateHostAccordingTıFlightId(firmId,tempID);
+            DbConnection.UpdateHostAccordingToFlightId(firmId,tempID);
             return true;
 
         }
