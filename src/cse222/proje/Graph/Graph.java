@@ -1,5 +1,6 @@
 package cse222.proje.Graph;
 
+import java.util.Set;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -60,6 +61,12 @@ public interface Graph {
 	 * Double.POSITIVE_INFINITY if there is no edge
 	 */
 	Edge getEdge(Vertex source, Vertex dest);
+
+	/**
+	 * Get the set of vertices.
+	 * @return set of vertices.
+	 */
+	Set<Vertex> getVertices();
 
 	/** Return an iterator to the edges connected to a given vertex.
 	 * @param source The source vertex
