@@ -1,19 +1,19 @@
 package cse222.proje;
 
-public class Sector {
+public class Sector implements Comparable<Sector> {
 
 	private int sectorID;
 	private CleanningStates cleanningState;
 	private SecurityStates securityState;
 
-	public Sector() {
+    public Sector() {
 
-	}
+    }
 
 	public enum CleanningStates{
 		DIRTY, CLEAN;
 	}
-
+	
 	public enum SecurityStates{
 		SECURE, INSECURE;
 	}
@@ -75,6 +75,29 @@ public class Sector {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Sector)) {
+			return false;
+		}
+
+		Sector sectorObj = (Sector) obj;
+		return sectorObj.sectorID == this.sectorID;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.sectorID;
+	}
+
+	@Override
+	public int compareTo(Sector o) {
+		return Integer.compare(this.sectorID, o.sectorID);
+	}
+
+	@Override
 	public String toString() {
 		return "Sector{" +
 				"ID=" + sectorID +
@@ -82,5 +105,6 @@ public class Sector {
 				", Security State='" + securityState + '\'' +
 				'}';
 	}
+
 
 }
