@@ -47,10 +47,10 @@ public class Airport {
 		cleanningPersonels = DbConnection.SelectCleanningPersonel();
 		//Security Personnel information is added
 		securityPersonels = DbConnection.SelectSecurityPersonel();
-		for (Employee item: cleanningPersonels) {
+		/*for (Employee item: cleanningPersonels) {
 			System.out.println("Hello");
 			System.out.println(item.toString());
-		}
+		}*/
 	}
 
 	public class Administrator extends Employee{
