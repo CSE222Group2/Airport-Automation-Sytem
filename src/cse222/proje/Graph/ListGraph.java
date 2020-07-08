@@ -130,6 +130,11 @@ public class ListGraph extends AbstractGraph {
 	}
 
 	@Override
+	public Set<Vertex> getVertices() {
+		return this.vertices;
+	}
+
+	@Override
 	public Iterator<Edge> edgeIterator(Vertex source) {
 		return edges.get(source).iterator();
 	}
