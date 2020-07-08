@@ -1,0 +1,217 @@
+Index: src/cse222/proje/Graph/AbstractGraph.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje.Graph;\r\n\r\npublic abstract class AbstractGraph implements Graph {\r\n\r\n\t/**\r\n\t * The number of vertices\r\n\t * */\r\n\tprivate int numV;\r\n\r\n\t/**\r\n\t * Flag to indicate whether this is a directed graph\r\n\t * */\r\n\tprivate boolean directed;\r\n\r\n\t/**\r\n\t * Construct a graph with the specified number of vertices and the directed flag.\r\n\t * If the directed flag is true, this is a directed graph.\r\n\t * @param numV The number of vertices\r\n\t * @param directed The directed flag\r\n\t */\r\n\tpublic AbstractGraph(int numV, boolean directed) {\r\n\t\tthis.numV = numV;\r\n\t\tthis.directed = directed;\r\n\t}\r\n\r\n\t/**\r\n\t * Return the number of vertices.\r\n\t * @return The number of vertices\r\n\t */\r\n\tpublic int getNumV() {\r\n\t\treturn numV;\r\n\t}\r\n\r\n\t/**\r\n\t * Set numV to the given parameter.\r\n\t * @param numV new numV\r\n\t */\r\n\tpublic void setNumV(int numV)\r\n\t{\r\n\t\tthis.numV = numV;\r\n\t}\r\n\r\n\t/**\r\n\t * Return whether this is a directed graph.\r\n\t * @return true if this is a directed graph\r\n\t */\r\n\tpublic boolean isDirected() {\r\n\t\treturn directed;\r\n\t}\r\n}\r\n
+===================================================================
+--- src/cse222/proje/Graph/AbstractGraph.java	(revision 5f832b3553120d681cbde306419fe94079672b13)
++++ src/cse222/proje/AbstractGraph.java	(date 1594236504514)
+@@ -1,4 +1,4 @@
+-package cse222.proje.Graph;
++package cse222.proje;
+ 
+ public abstract class AbstractGraph implements Graph {
+ 
+Index: src/cse222/proje/Graph/DijkstrasAlgorithm.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje.Graph;\r\n\r\nimport cse222.proje.Sector;\r\nimport java.util.HashMap;\r\nimport java.util.HashSet;\r\nimport java.util.Map;\r\nimport java.util.Set;\r\n\r\npublic class DijkstrasAlgorithm {\r\n\r\n\tpublic static void main(String[] args) {\r\n\t\tSector s1 = new Sector(1, Sector.CleanningStates.DIRTY, Sector.SecurityStates.SECURE);\r\n\t\tSector s2 = new Sector(2, Sector.CleanningStates.DIRTY, Sector.SecurityStates.SECURE);\r\n\t\tSector s3 = new Sector(3, Sector.CleanningStates.CLEAN, Sector.SecurityStates.INSECURE);\r\n\t\tSector s4 = new Sector(4, Sector.CleanningStates.DIRTY, Sector.SecurityStates.INSECURE);\r\n\t\tSector s5 = new Sector(5, Sector.CleanningStates.DIRTY, Sector.SecurityStates.SECURE);\r\n\t\tSector s6 = new Sector(6, Sector.CleanningStates.DIRTY, Sector.SecurityStates.INSECURE);\r\n\t\tSector s7 = new Sector(7, Sector.CleanningStates.DIRTY, Sector.SecurityStates.SECURE);\r\n\t\tSector s8 = new Sector(8, Sector.CleanningStates.DIRTY, Sector.SecurityStates.SECURE);\r\n\t\tSector s9 = new Sector(9, Sector.CleanningStates.CLEAN, Sector.SecurityStates.INSECURE);\r\n\t\tSector s10 = new Sector(10, Sector.CleanningStates.DIRTY, Sector.SecurityStates.INSECURE);\r\n\t\tSector s11 = new Sector(11, Sector.CleanningStates.DIRTY, Sector.SecurityStates.SECURE);\r\n\t\tSector s12 = new Sector(12, Sector.CleanningStates.DIRTY, Sector.SecurityStates.INSECURE);\r\n\r\n\t\tGraph graph = new ListGraph(12, true);\r\n\t\tVertex a = new Vertex(s1);\r\n\t\tVertex b = new Vertex(s2);\r\n\t\tVertex c = new Vertex(s3);\r\n\t\tVertex d = new Vertex(s4);\r\n\t\tVertex e = new Vertex(s5);\r\n\t\tVertex f = new Vertex(s6);\r\n\t\tVertex g = new Vertex(s7);\r\n\t\tVertex h = new Vertex(s8);\r\n\t\tVertex i = new Vertex(s9);\r\n\t\tVertex j = new Vertex(s10);\r\n\t\tVertex k = new Vertex(s11);\r\n\t\tVertex l = new Vertex(s12);\r\n\r\n\t\tgraph.insertVertex(a);\r\n\t\tgraph.insertVertex(b);\r\n\t\tgraph.insertVertex(c);\r\n\t\tgraph.insertVertex(d);\r\n\t\tgraph.insertVertex(e);\r\n\t\tgraph.insertVertex(f);\r\n\t\tgraph.insertVertex(g);\r\n\t\tgraph.insertVertex(h);\r\n\t\tgraph.insertVertex(i);\r\n\t\tgraph.insertVertex(j);\r\n\t\tgraph.insertVertex(k);\r\n\t\tgraph.insertVertex(l);\r\n\r\n\t\tgraph.insertEdge(new Edge(a, b, 2.0));\r\n\t\tgraph.insertEdge(new Edge(a, d, 2.0));\r\n\t\tgraph.insertEdge(new Edge(b, a, 2.0));\r\n\t\tgraph.insertEdge(new Edge(b, c, 5.0));\r\n\t\tgraph.insertEdge(new Edge(b, e, 1.0));\r\n\t\tgraph.insertEdge(new Edge(c, f, 2.0));\r\n\t\tgraph.insertEdge(new Edge(d, e, 5.0));\r\n\t\tgraph.insertEdge(new Edge(d, g, 3.0));\r\n\t\tgraph.insertEdge(new Edge(e, h, 6.0));\r\n\t\tgraph.insertEdge(new Edge(e, b, 1.0));\r\n\t\tgraph.insertEdge(new Edge(f, e, 4.0));\r\n\t\tgraph.insertEdge(new Edge(f, i, 1.0));\r\n\t\tgraph.insertEdge(new Edge(g, h, 8.0));\r\n\t\tgraph.insertEdge(new Edge(g, j, 7.0));\r\n\t\tgraph.insertEdge(new Edge(h, i, 1.0));\r\n\t\tgraph.insertEdge(new Edge(i, f, 1.0));\r\n\t\tgraph.insertEdge(new Edge(i, l, 3.0));\r\n\t\tgraph.insertEdge(new Edge(i, h, 1.0));\r\n\t\tgraph.insertEdge(new Edge(j, k, 2.0));\r\n\t\tgraph.insertEdge(new Edge(k, h, 4.0));\r\n\t\tgraph.insertEdge(new Edge(l, k, 5.0));\r\n\t\tgraph.insertEdge(new Edge(l, i, 3.0));\r\n\r\n\t\tshortestPath(graph, a, i);\r\n\t\tSystem.out.println();\r\n\t\tSystem.out.println();\r\n\t\tshortestPath(graph, b, k);\r\n\t\tSystem.out.println();\r\n\t\tSystem.out.println();\r\n\t\tshortestPath(graph, c, h);\r\n\t\tSystem.out.println();\r\n\t\tSystem.out.println();\r\n\t\tshortestPath(graph, l, e);\r\n\t}\r\n\r\n\tpublic static void shortestPath(Graph graph, Vertex start, Vertex dest) {\r\n\t\tMap<Vertex, Double> dist = new HashMap<>();\r\n\t\tMap<Vertex, Vertex> prev = new HashMap<>();\r\n\t\tdijkstrasAlgorithm(graph, start, dist, prev);\r\n\r\n\t\tfor (Map.Entry<Vertex, Double> entry : dist.entrySet()) {\r\n\t\t\tSystem.out.println(entry.getKey() + \": \" + entry.getValue());\r\n\t\t}\r\n\r\n\t\tSystem.out.println(\"Shortest path from \" + start.getVertex().getSectorID() +\r\n\t\t\t\t\t\t\t\" to \" + dest.getVertex().getSectorID() + \": \");\r\n\t\tprintPath(start, dest, prev);\r\n\t}\r\n\r\n\tpublic static void printPath(Vertex start, Vertex dest, Map<Vertex, Vertex> prev) {\r\n\t\tif (dest.equals(start)) {\r\n\t\t\tSystem.out.print(start.getVertex().getSectorID() + \" \");\r\n\t\t} else {\r\n\t\t\tprintPath(start, prev.get(dest), prev);\r\n\t\t\tSystem.out.print(dest.getVertex().getSectorID() + \" \");\r\n\t\t}\r\n\t}\r\n\r\n\tpublic static void dijkstrasAlgorithm(Graph graph, Vertex start,\r\n\t\t\t\t\t\t\t\t\t\t  Map<Vertex, Double> dist,\r\n\t\t\t\t\t\t\t\t\t\t  Map<Vertex, Vertex> prev) {\r\n\t\tint numV = graph.getNumV();\r\n\t\tHashSet<Vertex> vMinusS = new HashSet<>(numV);\r\n\r\n\t\tSet<Vertex> vertexSet = graph.getVertices();\r\n\r\n\t\tfor (Vertex v : vertexSet) {\r\n\t\t\tif (!v.equals(start)) {\r\n\t\t\t\tvMinusS.add(v);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tfor (Vertex v : vMinusS) {\r\n\t\t\tif (graph.isEdge(start, v)) {\r\n\t\t\t\tprev.put(v, start);\r\n\t\t\t\tdouble weight = graph.getEdge(start, v).getWeight();\r\n\t\t\t\tdist.put(v, weight);\r\n\t\t\t} else {\r\n\t\t\t\tdist.put(v, Double.POSITIVE_INFINITY);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\twhile (vMinusS.size() != 0) {\r\n\t\t\tdouble minDist = Double.POSITIVE_INFINITY;\r\n\t\t\tVertex u = null;\r\n\t\t\tfor (Vertex v : vMinusS) {\r\n\t\t\t\tif (dist.get(v) <= minDist) {\r\n\t\t\t\t\tminDist = dist.get(v);\r\n\t\t\t\t\tu = v;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\tvMinusS.remove(u);\r\n\r\n\t\t\tfor (Vertex v : vMinusS) {\r\n\t\t\t\tif (graph.isEdge(u, v)) {\r\n\t\t\t\t\tdouble weight = graph.getEdge(u, v).getWeight();\r\n\t\t\t\t\tif (dist.get(u) + weight <= dist.get(v)) {\r\n\t\t\t\t\t\tdist.put(v, dist.get(u) + weight);\r\n\t\t\t\t\t\tprev.put(v, u);\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n
+===================================================================
+--- src/cse222/proje/Graph/DijkstrasAlgorithm.java	(revision 5f832b3553120d681cbde306419fe94079672b13)
++++ src/cse222/proje/DijkstrasAlgorithm.java	(date 1594236504533)
+@@ -1,6 +1,5 @@
+-package cse222.proje.Graph;
++package cse222.proje;
+ 
+-import cse222.proje.Sector;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.Map;
+Index: src/cse222/proje/Graph/Edge.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje.Graph;\r\n\r\nimport java.util.Objects;\r\n\r\npublic class Edge {\r\n\r\n\t/**\r\n\t * Source vertex\r\n\t */\r\n\tprivate final Vertex source;\r\n\r\n\t/**\r\n\t * Destination vertex\r\n\t */\r\n\tprivate final Vertex dest;\r\n\r\n\t/**\r\n\t * The weight\r\n\t */\r\n\tprivate final double weight;\r\n\r\n\t/**\r\n\t * Constructs a weighted edge with a source of from and a destination of to.\r\n\t * @param source - The source vertex\r\n\t * @param dest * The destination vertex\r\n\t */\r\n\tpublic Edge(Vertex source, Vertex dest) {\r\n\t\tthis.source = source;\r\n\t\tthis.dest = dest;\r\n\t\tthis.weight = 1.0;\r\n\t}\r\n\r\n\t/**\r\n\t * Constructs a weighted edge with a source of from and a destination of to.\r\n\t * Sets the weight to w.\r\n\t * @param source - The source vertex\r\n\t * @param dest - The destination vertex\r\n\t * @param weight - The weight\r\n\t */\r\n\tpublic Edge(Vertex source, Vertex dest, double weight) {\r\n\t\tthis.source = source;\r\n\t\tthis.dest = dest;\r\n\t\tthis.weight = weight;\r\n\t}\r\n\r\n\t/**\r\n\t * Get the source\r\n\t * @return The source vertex\r\n\t */\r\n\tpublic Vertex getSource() {\r\n\t\treturn source;\r\n\t}\r\n\r\n\t/**\r\n\t * Get the destination\r\n\t * @return The destination vertex\r\n\t */\r\n\tpublic Vertex getDest() {\r\n\t\treturn dest;\r\n\t}\r\n\r\n\t/**\r\n\t * Get the weight\r\n\t * @return the value of weight\r\n\t */\r\n\tpublic double getWeight() {\r\n\t\treturn weight;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic boolean equals(Object o) {\r\n\t\tif (this == o) return true;\r\n\t\tif (o == null || getClass() != o.getClass()) return false;\r\n\t\tEdge edge = (Edge) o;\r\n\t\treturn Objects.equals(source, edge.source) &&\r\n\t\t\t\tObjects.equals(dest, edge.dest);\r\n\t}\r\n\r\n\t@Override\r\n\tpublic int hashCode() {\r\n\t\treturn Objects.hash(source, dest);\r\n\t}\r\n\r\n\t/**\r\n\t * Returns a String representation of the edge\r\n\t * @return A String representation of the edge\r\n\t */\r\n\t@Override\r\n\tpublic String toString() {\r\n\t\treturn \"Edge{\" +\r\n\t\t\t\t\"source=\" + source +\r\n\t\t\t\t\", dest=\" + dest +\r\n\t\t\t\t\", weight=\" + weight +\r\n\t\t\t\t'}';\r\n\t}\r\n}\r\n
+===================================================================
+--- src/cse222/proje/Graph/Edge.java	(revision 5f832b3553120d681cbde306419fe94079672b13)
++++ src/cse222/proje/Edge.java	(date 1594236504589)
+@@ -1,4 +1,4 @@
+-package cse222.proje.Graph;
++package cse222.proje;
+ 
+ import java.util.Objects;
+ 
+Index: src/cse222/proje/Graph/Graph.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje.Graph;\r\n\r\nimport java.util.Iterator;\r\nimport java.util.NoSuchElementException;\r\n\r\npublic interface Graph {\r\n\r\n\t/**\r\n\t * Return the number of vertices.\r\n\t * @return The number of vertices\r\n\t */\r\n\tint getNumV();\r\n\r\n\t/**\r\n\t * Determine whether this is a directed graph.\r\n\t * @return true if this is a directed graph\r\n\t */\r\n\tboolean isDirected();\r\n\r\n\t/**\r\n\t * Inserts the given vertex into the graph.\r\n\t * @param vertex The vertex to be inserted\r\n\t * @return true if vertex is inserted, false if it already exists in the graph\r\n\t */\r\n\tpublic boolean insertVertex(Vertex vertex);\r\n\r\n\t/**\r\n\t * Removes the given vertex from the graph.\r\n\t * @param vertex The vertex to be removed\r\n\t * @throws NoSuchElementException if there is no such vertex to remove\r\n\t */\r\n\tpublic void removeVertex(Vertex vertex);\r\n\r\n\t/**\r\n\t * Insert a new edge into the graph.\r\n\t * @param edge The new edge\r\n\t */\r\n\tvoid insertEdge(Edge edge);\r\n\r\n\t/**\r\n\t * Removes the specified edge from the graph.\r\n\t * @param edge The edge to remove\r\n\t * @return true if edge is removed, false if there is no such edge to remove.\r\n\t */\r\n\tpublic boolean removeEdge(Edge edge);\r\n\r\n\t/**\r\n\t * Determine whether an edge exists.\r\n\t * @param source The source vertex\r\n\t * @param dest The destination vertex\r\n\t * @return true if there is an edge from source to dest\r\n\t */\r\n\tboolean isEdge(Vertex source, Vertex dest);\r\n\r\n\t/**\r\n\t * Get the edge between two vertices.\r\n\t * @param source The source vertex\r\n\t * @param dest The destination vertex\r\n\t * @return The Edge between these two vertices or an Edge with a weight of\r\n\t * Double.POSITIVE_INFINITY if there is no edge\r\n\t */\r\n\tEdge getEdge(Vertex source, Vertex dest);\r\n\r\n\t/** Return an iterator to the edges connected to a given vertex.\r\n\t * @param source The source vertex\r\n\t * @return An Iterator to the vertices connected to source\r\n\t */\r\n\tIterator<Edge> edgeIterator(Vertex source);\r\n}\r\n
+===================================================================
+--- src/cse222/proje/Graph/Graph.java	(revision 5f832b3553120d681cbde306419fe94079672b13)
++++ src/cse222/proje/Graph.java	(date 1594236504551)
+@@ -1,4 +1,4 @@
+-package cse222.proje.Graph;
++package cse222.proje;
+ 
+ import java.util.Iterator;
+ import java.util.NoSuchElementException;
+Index: src/cse222/proje/Graph/ListGraph.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje.Graph;\r\n\r\nimport java.util.*;\r\n\r\n/**\r\n * A ListGraph is an extension of the AbstractGraph abstract class\r\n * that uses an array of lists to represent the edges.\r\n */\r\npublic class ListGraph extends AbstractGraph {\r\n\r\n\t/**\r\n\t * Holds vertices of the graph.\r\n\t */\r\n\tprivate Set<Vertex> vertices;\r\n\r\n\t/**\r\n\t * A map of linked list that holds the edges that originate with the source of each vertex */\r\n\tprivate Map<Vertex, LinkedList<Edge>> edges;\r\n\r\n\t/**\r\n\t * Construct a graph with the specified number of vertices and the directed flag.\r\n\t * If the directed flag is true, this is a directed graph.\r\n\t *\r\n\t * @param numV     The number of vertices\r\n\t * @param directed The directed flag\r\n\t */\r\n\tpublic ListGraph(int numV, boolean directed) {\r\n\t\tsuper(numV, directed);\r\n\t\tvertices = new HashSet<>();\r\n\t\tedges = new HashMap<>();\r\n\t}\r\n\r\n\r\n\t/**\r\n\t * Inserts the given vertex into the graph.\r\n\t * @param vertex The vertex to be inserted\r\n\t * @return true if vertex is inserted, false if it already exists in the graph\r\n\t */\r\n\t@Override\r\n\tpublic boolean insertVertex(Vertex vertex) {\r\n\t\tif (!vertices.add(new Vertex(vertex.getVertex()))) {\r\n\t\t\treturn false;\r\n\t\t}\r\n\t\tedges.put(vertex, new LinkedList<>());\r\n\t\tsetNumV(getNumV() + 1);\r\n\t\treturn true;\r\n\t}\r\n\r\n\t/**\r\n\t * Removes the given vertex from the graph.\r\n\t * @param vertex The vertex to be removed\r\n\t * @throws NoSuchElementException if there is no such vertex to remove\r\n\t */\r\n\t@Override\r\n\tpublic void removeVertex(Vertex vertex) throws NoSuchElementException\r\n\t{\r\n\t\tif (!vertices.contains(vertex)) {\r\n\t\t\tthrow new NoSuchElementException(\"No such vertex to remove.\");\r\n\t\t}\r\n\t\tLinkedList<Edge> list = edges.get(vertex);\r\n\t\tlist.clear();\r\n\t\tvertices.remove(vertex);\r\n\t\tedges.remove(vertex);\r\n\t\tsetNumV(getNumV() - 1);\r\n\t}\r\n\r\n\t@Override\r\n\tpublic void insertEdge(Edge edge) {\r\n\t\tVertex source = edge.getSource();\r\n\t\tVertex dest = edge.getDest();\r\n\r\n\t\tif (isEdge(source, dest)) {\r\n\t\t\tthrow new UnsupportedOperationException(\"Edge already exists in the graph.\");\r\n\t\t}\r\n\r\n\t\tif (edges.containsKey(source)) {\r\n\t\t\tedges.get(source).add(new Edge(edge.getSource(), edge.getDest(), edge.getWeight()));\r\n\t\t} else throw new NoSuchElementException(\"Invalid source vertex.\");\r\n\r\n\t\tif (!isDirected()) {\r\n\t\t\tif (edges.containsKey(dest)) {\r\n\t\t\t\tedges.get(source).add(new Edge(edge.getSource(), edge.getDest(), edge.getWeight()));\r\n\t\t\t} else throw new NoSuchElementException(\"Invalid destination vertex.\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Removes the specified edge from the graph.\r\n\t * @param edge The edge to remove\r\n\t * @return true if edge is removed, false if there is no such edge to remove.\r\n\t */\r\n\t@Override\r\n\tpublic boolean removeEdge(Edge edge)\r\n\t{\r\n\t\tif (!isEdge(edge.getSource(), edge.getDest())) {\r\n\t\t\treturn false;\r\n\t\t}\r\n\t\tLinkedList<Edge> list = edges.get(edge.getSource());\r\n\t\tlist.remove(edge);\r\n\r\n\t\tif (!isDirected()) {\r\n\t\t\tEdge tmp = new Edge(edge.getDest(), edge.getSource());\r\n\t\t\tlist.remove(tmp);\r\n\t\t}\r\n\t\treturn true;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic boolean isEdge(Vertex source, Vertex dest) {\r\n\t\tif (edges.containsKey(source)) {\r\n\t\t\tEdge edge = new Edge(source, dest);\r\n\t\t\tLinkedList<Edge> list = edges.get(source);\r\n\t\t\treturn list.contains(edge);\r\n\t\t}\r\n\t\treturn false;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic Edge getEdge(Vertex source, Vertex dest) {\r\n\t\tif (edges.containsKey(source)) {\r\n\t\t\tEdge tmp = new Edge(source, dest);\r\n\t\t\tLinkedList<Edge> list = edges.get(source);\r\n\t\t\tfor (Edge edge : list) {\r\n\t\t\t\tif (edge.equals(tmp)) {\r\n\t\t\t\t\treturn edge;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn null;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic Iterator<Edge> edgeIterator(Vertex source) {\r\n\t\treturn edges.get(source).iterator();\r\n\t}\r\n\r\n\t@Override\r\n\tpublic String toString() {\r\n\t\treturn \"ListGraph{\" +\r\n\t\t\t\t\"edges=\" + edges +\r\n\t\t\t\t\"} \";\r\n\t}\r\n}\r\n
+===================================================================
+--- src/cse222/proje/Graph/ListGraph.java	(revision 5f832b3553120d681cbde306419fe94079672b13)
++++ src/cse222/proje/ListGraph.java	(date 1594236504568)
+@@ -1,4 +1,4 @@
+-package cse222.proje.Graph;
++package cse222.proje;
+ 
+ import java.util.*;
+ 
+Index: src/cse222/proje/Graph/Vertex.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje.Graph;\r\n\r\nimport cse222.proje.Sector;\r\n\r\nimport java.util.Objects;\r\n\r\npublic class Vertex implements Comparable<Vertex> {\r\n\r\n\t/**\r\n\t * Value of the vertex\r\n\t */\r\n\tprivate final Sector vertex;\r\n\r\n\t/**\r\n\t * Boolean visited field for bfs and dfs.\r\n\t */\r\n\tprivate boolean visited;\r\n\r\n\t/**\r\n\t * Constructor that takes a Sector object\r\n\t * @param vertex Sector object\r\n\t */\r\n\tpublic Vertex(Sector vertex) {\r\n\t\tthis.vertex = vertex;\r\n\t\tthis.visited = false;\r\n\t}\r\n\r\n\t/**\r\n\t * Accessor method for vertex\r\n\t * @return Sector object\r\n\t */\r\n\tpublic Sector getVertex() {\r\n\t\treturn this.vertex;\r\n\t}\r\n\r\n\t/**\r\n\t * Accessor method for visited field\r\n\t * @return visited\r\n\t */\r\n\tpublic boolean isVisited() {\r\n\t\treturn this.visited;\r\n\t}\r\n\r\n\t/**\r\n\t * Set visited field to given parameter\r\n\t * @param visited new visited\r\n\t */\r\n\tpublic void setVisited(boolean visited) {\r\n\t\tthis.visited = visited;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic boolean equals(Object obj) {\r\n\t\tif (this == obj) {\r\n\t\t\treturn true;\r\n\t\t}\r\n\t\tif (!(obj instanceof Vertex)) {\r\n\t\t\treturn false;\r\n\t\t}\r\n\r\n\t\tVertex vertexObj = (Vertex) obj;\r\n\t\treturn vertexObj.vertex == this.vertex;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic int hashCode() {\r\n\t\treturn vertex.hashCode();\r\n\t}\r\n\r\n\t/**\r\n\t * compareTo method for Vertex objects\r\n\t * @param o - other Vertex object\r\n\t * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.\r\n\t */\r\n\t@Override\r\n\tpublic int compareTo(Vertex o) {\r\n\t\treturn Integer.compare(vertex.getSectorID(), o.getVertex().getSectorID());\r\n\t}\r\n\r\n\t/**\r\n\t * Return a String representation of the vertex\r\n\t * @return A String representation of the vertex\r\n\t */\r\n\t@Override\r\n\tpublic String toString() {\r\n\t\treturn \"Vertex{\" +\r\n\t\t\t\t\"vertex=\" + vertex +\r\n\t\t\t\t'}';\r\n\t}\r\n}\r\n
+===================================================================
+--- src/cse222/proje/Graph/Vertex.java	(revision 5f832b3553120d681cbde306419fe94079672b13)
++++ src/cse222/proje/Vertex.java	(date 1594236504609)
+@@ -1,8 +1,4 @@
+-package cse222.proje.Graph;
+-
+-import cse222.proje.Sector;
+-
+-import java.util.Objects;
++package cse222.proje;
+ 
+ public class Vertex implements Comparable<Vertex> {
+ 
+Index: .idea/uiDesigner.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/uiDesigner.xml	(date 1594236504424)
++++ .idea/uiDesigner.xml	(date 1594236504424)
+@@ -0,0 +1,124 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Palette2">
++    <group name="Swing">
++      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
++      </item>
++      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.png" removable="false" auto-create-binding="false" can-attach-label="true">
++        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
++        <initial-values>
++          <property name="text" value="Button" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="RadioButton" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="CheckBox" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="Label" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.png" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
++          <preferred-size width="-1" height="20" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.png" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.png" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
++      </item>
++    </group>
++  </component>
++</project>
+\ No newline at end of file

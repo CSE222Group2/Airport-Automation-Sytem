@@ -2,8 +2,6 @@ package cse222.proje.Graph;
 
 import cse222.proje.Sector;
 
-import java.util.Objects;
-
 public class Vertex implements Comparable<Vertex> {
 
 	/**

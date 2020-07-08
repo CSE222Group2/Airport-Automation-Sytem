@@ -1,0 +1,43 @@
+Index: src/cse222/proje/Pilot.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package cse222.proje;\r\nimport java.util.ArrayList;\r\nimport java.util.Scanner;\r\n\r\npublic class Pilot extends Employee{\r\n    /**\r\n     * Holds flights that pilot work on\r\n     */\r\n    ArrayList<Flight> flights;\r\n\r\n    /**\r\n     * Create a Pilot object\r\n     * @param name will be set\r\n     * @param surname will be set\r\n     * @param ID will be set\r\n     * @param password will be set\r\n     */\r\n    public Pilot(String name, String surname, int ID, String password) {\r\n        super(name, surname, ID, password);\r\n        this.flights = new ArrayList<Flight>();\r\n    }\r\n\r\n    public Pilot() {\r\n        super();\r\n    }\r\n\r\n    public void setFlights(ArrayList<Flight> flights) {\r\n        this.flights = flights;\r\n    }\r\n\r\n    /**\r\n     * If pilot has authority to change flight's that has given flightID plane status\r\n     * @param flightID will be searched\r\n     * @throws NullPointerException if given parameter is null\r\n     * @throws IllegalArgumentException if enter wrong input type for enum\r\n     */\r\n    public void setReadinessOfPlane(int flightID){\r\n        for(int i = 0; i < flights.size(); ++i){\r\n            if(flights.get(i).getFlightID() == flightID){\r\n                Scanner scanStatus = new Scanner(System.in);\r\n                Plane.StateOfPlane status = Plane.StateOfPlane.valueOf(scanStatus.next());\r\n                if(status.equals(Plane.StateOfPlane.ReadyToFly) ||\r\n                        status.equals(Plane.StateOfPlane.Flying) ||\r\n                            status.equals(Plane.StateOfPlane.Landed))\r\n                    flights.get(i).getPlane().setReadinessOfPlane(status);\r\n                else\r\n                    throw new IllegalArgumentException();\r\n            }\r\n        }\r\n\r\n        throw new NullPointerException();\r\n    }\r\n\r\n   \r\n   /**\r\n    * Returns Pilot's flights as String\r\n    * @return Pilot's flights as String\r\n    */\r\n    public String getFlights(){\r\n    \tString str = new String();\r\n        Iterator<Flight> iter = flights.iterator();\r\n\r\n        while (iter.hasNext()){\r\n            Flight temp = iter.next();\r\n            str += \"\\n Flight ID: \" + temp.flightID + \"\\n Flight \" + temp.flightDate + \"\\n Plane ID: \" + temp.plane.planeID + \"\\n\";\r\n        }\r\n        return \"\\n Pilot Flights \\n\" + str + \"\\n\";\r\n    }\r\n    \r\n    /**\r\n     * Returns Information about Pilot like name, surname, ID\r\n     * @return Information about Pilot like name, surname, ID\r\n     */\r\n    public String toString() {\r\n    \t\r\n    \treturn \"Pilot ID: \" + ID + \"\\n Pilot name: \"+name + \"\\n Pilot surname: \"+surname;\r\n    }  \r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/cse222/proje/Pilot.java	(revision 9e177256ab60983601056b11c35a02d9874402fa)
++++ src/cse222/proje/Pilot.java	(date 1592922208354)
+@@ -1,5 +1,6 @@
+ package cse222.proje;
+ import java.util.ArrayList;
++import java.util.Iterator;
+ import java.util.Scanner;
+ 
+ public class Pilot extends Employee{
+@@ -66,6 +67,18 @@
+         }
+         return "\n Pilot Flights \n" + str + "\n";
+     }
++
++    public String getFlight(int flightId){
++        Iterator<Flight> iter = flights.iterator();
++
++        while(iter.hasNext()){
++            Flight temp = iter.next();
++            if(temp.getFlightID() == flightId){
++                return "\n Flight ID: " + temp.flightID + "\n Flight " + temp.flightDate + "\n Plane ID: " + temp.plane.planeID + "\n";
++            }
++        }
++        return null;
++    }
+     
+     /**
+      * Returns Information about Pilot like name, surname, ID
+@@ -74,6 +87,6 @@
+     public String toString() {
+     	
+     	return "Pilot ID: " + ID + "\n Pilot name: "+name + "\n Pilot surname: "+surname;
+-    }  
++    }
+ 
+ }
