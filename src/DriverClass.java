@@ -106,7 +106,7 @@ public class DriverClass {
 							if (tempAirportAdmin == null)
 								System.out.printf("\n There is no Airport Administrator with that ID and password in the system \n");
 							else{
-								System.out.printf("\n Select you want to do as Firm Administrator \n" +
+								System.out.printf("\n Select you want to do as Airport Administrator \n" +
 										"\n 1- Add Firm" +
 										"\n 2- Remove Firm" +
 										"\n 3- Display Firms" +
